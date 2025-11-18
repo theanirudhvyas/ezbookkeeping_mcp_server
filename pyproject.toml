@@ -1,8 +1,17 @@
 [project]
 name = "ezbookkeeping-mcp-server"
 version = "0.1.0"
-description = "MCP server for bookkeeping and financial management"
-requires-python = ">=3.14"
+description = "MCP server for EzBookkeeping personal finance management"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
 dependencies = [
     "mcp[cli]>=1.21.2",
 ]
+
+[project.urls]
+Repository = "https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
