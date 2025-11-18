@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server"
+Repository = "https://github.com/theanirudhvyas/ezbookkeeping_mcp_server"
 
 [build-system]
 requires = ["hatchling"]

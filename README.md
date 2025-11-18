@@ -71,7 +71,7 @@ See [MCP_SERVER_DESIGN.md](MCP_SERVER_DESIGN.md) for the complete architecture p
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server.git
+git clone https://github.com/theanirudhvyas/ezbookkeeping_mcp_server.git
 cd ezbookkeeping_mcp_server
 ```
 
@@ -276,8 +276,8 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/discussions)
+- **Issues:** [GitHub Issues](https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/discussions)
 - **EzBookkeeping:** [Official Documentation](https://ezbookkeeping.mayswind.net)
 
 ## Related Projects

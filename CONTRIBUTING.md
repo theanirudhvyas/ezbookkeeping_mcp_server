@@ -46,7 +46,7 @@ Enhancement suggestions are tracked as GitHub issues.
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server.git
+git clone https://github.com/theanirudhvyas/ezbookkeeping_mcp_server.git
 cd ezbookkeeping_mcp_server
 
 # Install dependencies
@@ -281,8 +281,8 @@ result = batch_delete_transactions(transaction_ids)
 
 ## Getting Help
 
-- **Questions:** Open a [GitHub Discussion](https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/discussions)
-- **Bugs:** File an [issue](https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/issues)
+- **Questions:** Open a [GitHub Discussion](https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/discussions)
+- **Bugs:** File an [issue](https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/issues)
 - **Chat:** Join discussions in existing issues/PRs
 
 ## Recognition

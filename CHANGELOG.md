@@ -34,5 +34,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project structure and configuration
 - Basic MCP server examples
 
-[Unreleased]: https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/YOUR_USERNAME/ezbookkeeping_mcp_server/releases/tag/v0.1.0
+[Unreleased]: https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/theanirudhvyas/ezbookkeeping_mcp_server/releases/tag/v0.1.0
