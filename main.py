@@ -1,107 +1,151 @@
+"""EzBookkeeping MCP Server - Main entry point."""
 from mcp.server.fastmcp import FastMCP
-from typing import Optional
-from datetime import datetime
+from src.tools.transactions import add_transaction, get_transactions
+from src.resources.accounts import get_accounts, get_account_by_id
 
 # Create the MCP server instance
-mcp = FastMCP("EZBookkeeping")
+mcp = FastMCP("EzBookkeeping")
 
-# Example Tool: Add a transaction
+
+# ============================================================================
+# TOOLS (Write Operations)
+# ============================================================================
+
 @mcp.tool()
-def add_transaction(
+def create_transaction(
     amount: float,
     description: str,
-    category: str,
-    transaction_type: str = "expense"
+    account_id: str,
+    category_id: str,
+    transaction_type: int = 1
 ) -> dict:
     """
-    Add a new transaction to the bookkeeping system.
-
+    Create a new transaction in EzBookkeeping.
+    
     Args:
-        amount: Transaction amount
+        amount: Transaction amount in dollars (e.g., 45.99)
         description: Description of the transaction
-        category: Category (e.g., 'food', 'transport', 'salary')
-        transaction_type: Type of transaction ('expense' or 'income')
-
+        account_id: ID of the account
+        category_id: ID of the category
+        transaction_type: Type of transaction (1=Expense, 2=Income, 3=Transfer Out, 4=Transfer In)
+    
     Returns:
         Dictionary with transaction details and confirmation
     """
-    transaction = {
-        "id": f"txn_{datetime.now().strftime('%Y%m%d%H%M%S')}",
-        "amount": amount,
-        "description": description,
-        "category": category,
-        "type": transaction_type,
-        "date": datetime.now().isoformat()
-    }
-    return {
-        "status": "success",
-        "message": f"Transaction added: {transaction_type} of ${amount}",
-        "transaction": transaction
-    }
+    return add_transaction(
+        amount=amount,
+        description=description,
+        account_id=account_id,
+        category_id=category_id,
+        transaction_type=transaction_type
+    )
 
-# Example Tool: Calculate total
+
 @mcp.tool()
-def calculate_balance(transactions: list[dict]) -> dict:
+def list_transactions(
+    max_count: int = 50,
+    account_id: str = None,
+    category_id: str = None
+) -> dict:
     """
-    Calculate the balance from a list of transactions.
-
+    List recent transactions from EzBookkeeping.
+    
     Args:
-        transactions: List of transaction dictionaries with 'amount' and 'type' fields
-
+        max_count: Maximum number of transactions to return (default: 50)
+        account_id: Optional - filter by account ID
+        category_id: Optional - filter by category ID
+    
     Returns:
-        Dictionary with income, expenses, and balance totals
+        Dictionary with list of transactions
     """
-    income = sum(t["amount"] for t in transactions if t.get("type") == "income")
-    expenses = sum(t["amount"] for t in transactions if t.get("type") == "expense")
-    balance = income - expenses
+    return get_transactions(
+        max_count=max_count,
+        account_id=account_id,
+        category_id=category_id
+    )
 
-    return {
-        "income": income,
-        "expenses": expenses,
-        "balance": balance
-    }
 
-# Example Resource: Get bookkeeping summary
-@mcp.resource("bookkeeping://summary/{period}")
-def get_summary(period: str) -> str:
+# ============================================================================
+# RESOURCES (Read Operations)
+# ============================================================================
+
+@mcp.resource("ezbookkeeping://accounts")
+def list_all_accounts() -> str:
     """
-    Get a bookkeeping summary for the specified period.
+    Get all accounts from EzBookkeeping.
+    
+    Returns:
+        JSON string with all accounts
+    """
+    import json
+    result = get_accounts()
+    return json.dumps(result, indent=2)
 
+
+@mcp.resource("ezbookkeeping://accounts/{account_id}")
+def get_account_details(account_id: str) -> str:
+    """
+    Get specific account details by ID.
+    
     Args:
-        period: Time period ('today', 'week', 'month', 'year')
-
+        account_id: Account ID
+    
     Returns:
-        Summary report as a string
+        JSON string with account details
     """
-    return f"""
-Bookkeeping Summary for {period}:
-- Total Income: $0.00
-- Total Expenses: $0.00
-- Balance: $0.00
+    import json
+    result = get_account_by_id(account_id)
+    return json.dumps(result, indent=2)
 
-Note: This is a demo server. Connect to a real database for actual data.
-"""
 
-# Example Prompt: Generate financial report
+# ============================================================================
+# PROMPTS (AI Templates)
+# ============================================================================
+
 @mcp.prompt()
-def create_financial_report(period: str = "month", format: str = "detailed") -> str:
+def analyze_spending(period: str = "month") -> str:
     """
-    Generate a prompt for creating a financial report.
-
+    Generate a prompt for analyzing spending patterns.
+    
     Args:
-        period: Time period for the report
-        format: Report format ('summary' or 'detailed')
-
+        period: Time period to analyze (week, month, quarter, year)
+    
     Returns:
         Prompt string for the LLM
     """
-    if format == "summary":
-        return f"Please create a brief financial summary for the {period} including total income, expenses, and balance."
+    return f"""Please analyze my spending for the {period} and provide:
+
+1. Total spending by category
+2. Top 5 expenses
+3. Spending trends compared to previous {period}
+4. Unusual or noteworthy transactions
+5. Budget recommendations
+
+Please be specific with amounts and percentages."""
+
+
+@mcp.prompt()
+def budget_review(category: str = "all") -> str:
+    """
+    Generate a prompt for budget review.
+    
+    Args:
+        category: Category to review (or "all" for all categories)
+    
+    Returns:
+        Prompt string for the LLM
+    """
+    if category == "all":
+        return """Please review my overall budget and provide:
+
+1. Budget vs actual spending by category
+2. Categories where I'm over/under budget
+3. Recommendations for adjusting budgets
+4. Tips for staying within budget"""
     else:
-        return f"""Please create a detailed financial report for the {period} including:
-1. Total income broken down by category
-2. Total expenses broken down by category
-3. Net balance
-4. Key insights and spending patterns
-5. Recommendations for improvement
-"""
+        return f"""Please review my budget for the {category} category and provide:
+
+1. Budget vs actual spending
+2. Whether I'm on track for this category
+3. Specific recommendations for this category
+4. Comparison with similar periods"""
